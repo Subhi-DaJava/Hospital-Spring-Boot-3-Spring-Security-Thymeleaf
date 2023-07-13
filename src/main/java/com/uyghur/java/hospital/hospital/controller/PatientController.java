@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,5 +43,14 @@ public class PatientController {
     @GetMapping("/patients")
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         return ResponseEntity.ok(repository.findAll());
+    }
+
+    @GetMapping("/delete")
+    public String deleteById(
+        @RequestParam long id,
+        @RequestParam int page,
+        @RequestParam String keyword) {
+        repository.deleteById(id);
+        return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
 }
