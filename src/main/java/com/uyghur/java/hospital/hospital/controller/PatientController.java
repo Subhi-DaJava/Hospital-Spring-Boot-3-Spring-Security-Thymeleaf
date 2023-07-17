@@ -2,6 +2,8 @@ package com.uyghur.java.hospital.hospital.controller;
 
 import com.uyghur.java.hospital.hospital.entity.Patient;
 import com.uyghur.java.hospital.hospital.repository.PatientRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
 public class PatientController {
+
+    private static Logger log = LoggerFactory.getLogger(PatientController.class);
 
     private final PatientRepository repository;
 
@@ -45,12 +50,19 @@ public class PatientController {
         return ResponseEntity.ok(repository.findAll());
     }
 
+    // localhost://8081/index?id=33
     @GetMapping("/delete")
     public String deleteById(
-        @RequestParam long id,
-        @RequestParam int page,
-        @RequestParam String keyword) {
+        @RequestParam(name = "id") long id,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "keyword", defaultValue = "") String keyword) {
         repository.deleteById(id);
+        //Patient patientById = repository.findById(id).orElseThrow(() -> new RuntimeException("No patient with id:{%d}".formatted(id)));
+        Optional<Patient> patientById = repository.findById(id);
+
+        if(patientById.isEmpty()) {
+            log.info("No patient with id:{%d} in database, form PatientController".formatted(id));
+        }
         return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
 }
