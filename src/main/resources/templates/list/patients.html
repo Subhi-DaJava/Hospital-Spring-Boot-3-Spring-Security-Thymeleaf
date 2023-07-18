@@ -1,49 +1,58 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template_layout/layout.html">
 <head>
     <meta charset="UTF-8">
     <title>Patient List</title>
-    <link rel="stylesheet" href="webjars/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="webjars/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 </head>
 <body>
-<div class="p-3 text-center">
-    <div class="card">
-        <div class="card-header text text-primary">Patient List</div>
-        <div class="card-body">
-            <form method="get" th:action="@{index}">
-                <label>Keyword:</label>
-                <label>
-                    <input type="text" name="keyword" th:value="${keyword}">
-                </label>
-                <button type="submit" class="btn btn-info"><i class="bi bi-search"></i></button>
-            </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>ID</th> <th>Name</th> <th>Date Of Birth</th> <th>Health</th> <th>Score</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="patient:${list}">
-                    <td th:text="${patient.id}"></td>
-                    <td th:text="${patient.name}"></td>
-                    <td th:text="${patient.dateOfBirth}"></td>
-                    <td th:text="${patient.sick}"></td>
-                    <td th:text="${patient.score}"></td>
-                    <td>
-                        <a onclick="return confirm('Are you sure to delete ?')" th:href="@{delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}" class="btn bg-danger"><i class="bi bi-trash"></i></a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <ul class="nav nav-fill">
-                <li th:each="page,status:${pages}">
-                    <a th:href="@{/index(page=${status.index}, keyword=${keyword})}" th:class="${(currentPage==status.index)?'btn btn-info ms-1':'btn btn-outline-info ms-1'}" th:text="${1 + status.index}"></a>
-                </li>
-            </ul>
+<div layout:fragment="content">
+    <div class="p-3 text-center">
+        <div class="card">
+            <div class="card-header text text-primary">Patient List</div>
+            <div class="card-body">
+                <form method="get" th:action="@{index}">
+                    <label>Keyword:</label>
+                    <label>
+                        <input type="text" name="keyword" th:value="${keyword}">
+                    </label>
+                    <button type="submit" class="btn btn-info"><i class="bi bi-search"></i></button>
+                </form>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date Of Birth</th>
+                        <th>Health</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="patient:${list}">
+                        <td th:text="${patient.id}"></td>
+                        <td th:text="${patient.name}"></td>
+                        <td th:text="${patient.dateOfBirth}"></td>
+                        <td th:text="${patient.sick}"></td>
+                        <td th:text="${patient.score}"></td>
+                        <td>
+                            <a onclick="return confirm('Are you sure to delete ?')"
+                               th:href="@{delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
+                               class="btn bg-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ul class="nav nav-fill">
+                    <li th:each="page,status:${pages}">
+                        <a th:href="@{/index(page=${status.index}, keyword=${keyword})}"
+                           th:class="${(currentPage==status.index)?'btn btn-info ms-1':'btn btn-outline-info ms-1'}"
+                           th:text="${1 + status.index}"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

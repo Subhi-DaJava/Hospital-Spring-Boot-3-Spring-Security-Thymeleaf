@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -65,4 +65,24 @@ public class PatientController {
         }
         return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
+
+    @GetMapping("/")
+    public String homePage() {
+        return "redirect:/index";
+    }
+
+    @GetMapping("/formPatient")
+    public String formPatient(Model model) {
+        model.addAttribute("patient", new Patient());
+        return "/form_patient/formPatient";
+    }
+
+    @PostMapping("/addPatient")
+    public String addPatient(Patient patient) {
+        repository.save(patient);
+
+        return "redirect:/";
+    }
+
+
 }

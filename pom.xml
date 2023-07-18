@@ -66,14 +66,16 @@
 			<artifactId>jquery</artifactId>
 			<version>3.6.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.webjars.npm/bootstrap-icons -->
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>bootstrap-icons</artifactId>
 			<version>1.10.5</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

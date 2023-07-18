@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template_layout/layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Patient</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="p-3 w-25">
+        <form th:action="@{/addPatient}" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="name" name="name" th:value="${patient.name}">
+<!--                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+            </div>
+            <div class="mb-3">
+                <label for="dateOfBirth" class="form-label">Date Of Birth</label>
+                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" th:value="${patient.dateOfBirth}">
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="sick" id="sick" th:checked="${patient.sick}">
+                <label class="form-check-label" for="sick">Situation (Sick or Not)</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="score" class="form-label">Score</label>
+                <input type="text" class="form-control" id="score" name="score" th:value="${patient.score}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add New Patient</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
