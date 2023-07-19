@@ -16,6 +16,12 @@
                 <div class="card-body">
                     <div class="p-3">
                         <form th:action="@{/addPatient}" method="POST">
+
+                            <div class="mb-3">
+                                <label for="id" class="form-label">Patient ID: </label> <label class="form-label" th:text="${patient.id}"></label>
+                                <input type="hidden" class="form-control" id="id" name="id" th:value="${patient.id}">
+                            </div>
+
                             <div class="mb-3">
                                 <label for="name" class="form-label">Patient Name</label>
                                 <input type="text" class="form-control" id="name" name="name" th:value="${patient.name}">
@@ -45,7 +51,7 @@
                                 <span class="text-danger" th:errors="${patient.score}"></span>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Add New Patient</button>
+                            <button type="submit" class="btn btn-primary">Update Patient</button>
                         </form>
                     </div>
                 </div>

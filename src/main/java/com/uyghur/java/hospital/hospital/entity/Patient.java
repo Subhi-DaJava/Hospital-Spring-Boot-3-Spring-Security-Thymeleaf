@@ -1,9 +1,7 @@
 package com.uyghur.java.hospital.hospital.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,13 +19,22 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name field is mandatory")
+    @Size(min = 5, max = 30, message = "Name should be more than 5 letters and less than 30 letters")
     private String name;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Date field is mandatory")
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     private boolean sick;
 
+    @Email
+    @NotBlank(message = "Email is mandatory")
+    private String email;
+
+    @Min(value = 100, message = "Score should be greater than or equal to 100")
     private int score;
 
     @Override

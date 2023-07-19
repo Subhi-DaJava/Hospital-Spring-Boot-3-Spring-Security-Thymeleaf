@@ -25,6 +25,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Email</th>
                         <th>Date Of Birth</th>
                         <th>Health</th>
                         <th>Score</th>
@@ -34,6 +35,7 @@
                     <tr th:each="patient:${list}">
                         <td th:text="${patient.id}"></td>
                         <td th:text="${patient.name}"></td>
+                        <td th:text="${patient.email}"></td>
                         <td th:text="${patient.dateOfBirth}"></td>
                         <td th:text="${patient.sick}"></td>
                         <td th:text="${patient.score}"></td>
@@ -41,6 +43,11 @@
                             <a onclick="return confirm('Are you sure to delete ?')"
                                th:href="@{delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
                                class="btn bg-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                        <td>
+                            <a onclick="return confirm('Are you sure to update ?')"
+                               th:href="@{editPatient(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
+                               class="btn bg-info"><i class="bi bi-pencil-fill"></i></a>
                         </td>
                     </tr>
                     </tbody>

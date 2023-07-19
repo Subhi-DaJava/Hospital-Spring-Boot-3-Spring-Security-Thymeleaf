@@ -2,6 +2,7 @@ package com.uyghur.java.hospital.hospital.controller;
 
 import com.uyghur.java.hospital.hospital.entity.Patient;
 import com.uyghur.java.hospital.hospital.repository.PatientRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @Controller
 public class PatientController {
 
-    private static Logger log = LoggerFactory.getLogger(PatientController.class);
+    private static final Logger log = LoggerFactory.getLogger(PatientController.class);
 
     private final PatientRepository repository;
 
@@ -78,10 +80,24 @@ public class PatientController {
     }
 
     @PostMapping("/addPatient")
-    public String addPatient(Patient patient) {
+    public String addPatient(@Valid Patient patient, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "/form_patient/formPatient";
+        }
         repository.save(patient);
 
-        return "redirect:/";
+        return "redirect:/index?keyword=" + patient.getName();
+    }
+
+    @GetMapping("/editPatient")
+    public String editPatient(Model model, @RequestParam(name = "id") Long id) {
+
+       Patient patientById = repository.findById(id).get();
+
+        model.addAttribute("patient", patientById);
+
+        return "/edit_patient/editPatient";
     }
 
 
