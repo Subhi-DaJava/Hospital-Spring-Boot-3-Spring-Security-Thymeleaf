@@ -31,8 +31,8 @@
             Patients
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" th:href="@{/user/index}">Patients</a></li>
-            <li><a class="dropdown-item" th:href="@{/admin/formPatient}">Add Patient</a></li>
+            <li><a class="dropdown-item" th:href="@{/user/index}" th:if="${#authorization.expression('hasRole(''USER'')')}">Patients</a></li>
+            <li><a class="dropdown-item" th:href="@{/admin/formPatient}" th:if="${#authorization.expression('hasRole(''ADMIN'')')}" >Add Patient</a></li>
             <li><a class="dropdown-item" th:href="@{/home}">Home</a></li>
           </ul>
         </li>
@@ -41,7 +41,7 @@
         </li>
       </ul>
 
-      <ul class="navbar-nav mb-2 mb-lg-0" th:if="${#authentication.isAuthenticated()}">
+      <ul class="navbar-nav mb-2 mb-lg-0" th:if="${#authorization.expression('hasRole(''USER'')')}">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown_user" role="button" data-bs-toggle="dropdown" aria-expanded="false">
            Username: <span th:text = "${#authentication.name} " ></span>, User's Roles: <span th:text = " ${#authorization.getAuthentication().getAuthorities()}" ></span>

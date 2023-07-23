@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +33,7 @@ public class PatientController {
     }
 
     @GetMapping("/user/index")
+    @PreAuthorize("hasRole('USER')")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -48,6 +51,7 @@ public class PatientController {
     }
 
     @GetMapping("/user/patients")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         return ResponseEntity.ok(repository.findAll());
     }
@@ -69,28 +73,33 @@ public class PatientController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('USER')")
     public String homePage() {
         return "redirect:/user/index";
     }
 
     @GetMapping("/admin/formPatient")
+    @PreAuthorize("hasRole('ADMIN')")
     public String formPatient(Model model) {
         model.addAttribute("patient", new Patient());
         return "/form_patient/formPatient";
     }
 
     @PostMapping("/admin/addPatient")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addPatient(@Valid Patient patient, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
+            log.error("Some errors occur, please check the fields");
             return "/form_patient/formPatient";
         }
-        repository.save(patient);
-
+        Patient patientSaved = repository.save(patient);
+        log.info("New Patient with id:{} has been successfully saved in Database", patientSaved.getId());
         return "redirect:/user/index?keyword=" + patient.getName();
     }
 
     @GetMapping("/admin/editPatient")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editPatient(Model model, @RequestParam(name = "id") Long id) {
 
        Optional<Patient> patientById = repository.findById(id);
@@ -112,4 +121,21 @@ public class PatientController {
     }
 
 
+    @PostMapping("/admin/savePatient")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Patient> savePatient(@Valid Patient patient, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            log.error("Some errors occur, please check the fields");
+        }
+        Patient patientSaved = repository.save(patient);
+        log.info("New Patient with id:{} has been successfully saved in Database", patientSaved.getId());
+        return new ResponseEntity<>(patientSaved, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/user/patient-list")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Patient>> allPatients() {
+        return ResponseEntity.ok(repository.findAll());
+    }
 }
