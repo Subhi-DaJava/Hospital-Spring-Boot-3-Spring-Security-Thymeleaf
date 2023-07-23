@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template_layout/layout.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Authorized</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="p-3 text-center alert alert-danger mt-3">
+        <h2>Sorry, you do not have the right to access this resource. Please contact the administrator!</h2>
+        <button class="btn btn-primary"><a th:href="@{/home}" class="text-white fs-2 text-decoration-none">Go Back to Patient List</a></button>
+    </div>
+</div>
+</body>
+</html>

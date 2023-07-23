@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-header text text-primary">Patient List</div>
             <div class="card-body">
-                <form method="get" th:action="@{index}">
+                <form method="get" th:action="@{/user/index}">
                     <label>Keyword:</label>
                     <label>
                         <input type="text" name="keyword" th:value="${keyword}">
@@ -39,14 +39,16 @@
                         <td th:text="${patient.dateOfBirth}"></td>
                         <td th:text="${patient.sick}"></td>
                         <td th:text="${patient.score}"></td>
-                        <td>
+
+                        <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                             <a onclick="return confirm('Are you sure to delete ?')"
-                               th:href="@{delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
+                               th:href="@{/admin/delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
                                class="btn bg-danger"><i class="bi bi-trash"></i></a>
                         </td>
+
                         <td>
                             <a onclick="return confirm('Are you sure to update ?')"
-                               th:href="@{editPatient(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
+                               th:href="@{/admin/editPatient(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
                                class="btn bg-info"><i class="bi bi-pencil-fill"></i></a>
                         </td>
                     </tr>
@@ -54,7 +56,7 @@
                 </table>
                 <ul class="nav nav-fill">
                     <li th:each="page,status:${pages}">
-                        <a th:href="@{/index(page=${status.index}, keyword=${keyword})}"
+                        <a th:href="@{/user/index(page=${status.index}, keyword=${keyword})}"
                            th:class="${(currentPage==status.index)?'btn btn-info ms-1':'btn btn-outline-info ms-1'}"
                            th:text="${1 + status.index}"></a>
                     </li>

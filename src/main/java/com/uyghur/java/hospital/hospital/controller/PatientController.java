@@ -30,7 +30,7 @@ public class PatientController {
         this.repository = repository;
     }
 
-    @GetMapping("/index")
+    @GetMapping("/user/index")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -47,13 +47,13 @@ public class PatientController {
         return "/list/patients";
     }
 
-    @GetMapping("/patients")
+    @GetMapping("/user/patients")
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         return ResponseEntity.ok(repository.findAll());
     }
 
     // localhost://8081/index?id=33
-    @GetMapping("/delete")
+    @GetMapping("/admin/delete")
     public String deleteById(
         @RequestParam(name = "id") long id,
         @RequestParam(name = "page", defaultValue = "0") int page,
@@ -65,21 +65,21 @@ public class PatientController {
         if(patientById.isEmpty()) {
             log.info("No patient with id:{%d} in database, form PatientController".formatted(id));
         }
-        return "redirect:/index?page=" + page + "&keyword=" + keyword;
+        return "redirect:/user/index?page=" + page + "&keyword=" + keyword;
     }
 
     @GetMapping("/")
     public String homePage() {
-        return "redirect:/index";
+        return "redirect:/user/index";
     }
 
-    @GetMapping("/formPatient")
+    @GetMapping("/admin/formPatient")
     public String formPatient(Model model) {
         model.addAttribute("patient", new Patient());
         return "/form_patient/formPatient";
     }
 
-    @PostMapping("/addPatient")
+    @PostMapping("/admin/addPatient")
     public String addPatient(@Valid Patient patient, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -87,17 +87,28 @@ public class PatientController {
         }
         repository.save(patient);
 
-        return "redirect:/index?keyword=" + patient.getName();
+        return "redirect:/user/index?keyword=" + patient.getName();
     }
 
-    @GetMapping("/editPatient")
+    @GetMapping("/admin/editPatient")
     public String editPatient(Model model, @RequestParam(name = "id") Long id) {
 
-       Patient patientById = repository.findById(id).get();
+       Optional<Patient> patientById = repository.findById(id);
+        if(patientById.isPresent()) {
+            model.addAttribute("patient", patientById.get());
+            log.info("Patient with id:{} has been successfully retrieved from database.", id);
+            return "/edit_patient/editPatient";
 
-        model.addAttribute("patient", patientById);
+        } else {
+            log.error("No patient with this id:{} in database!", id);
+            throw new IllegalArgumentException("No patient with this id:{%d} in database!".formatted(id));
+        }
 
-        return "/edit_patient/editPatient";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "/home/home";
     }
 
 
