@@ -120,7 +120,6 @@ public class PatientController {
         return "/home/home";
     }
 
-
     @PostMapping("/admin/savePatient")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Patient> savePatient(@Valid Patient patient, BindingResult bindingResult) {
