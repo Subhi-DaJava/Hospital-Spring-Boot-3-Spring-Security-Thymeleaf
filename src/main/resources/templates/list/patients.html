@@ -40,7 +40,7 @@
                         <td th:text="${patient.sick}"></td>
                         <td th:text="${patient.score}"></td>
 
-                        <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <td th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
                             <a onclick="return confirm('Are you sure to delete ?')"
                                th:href="@{/admin/delete(id=${patient.id}, keyword=${keyword}, page=${currentPage})}"
                                class="btn bg-danger"><i class="bi bi-trash"></i></a>

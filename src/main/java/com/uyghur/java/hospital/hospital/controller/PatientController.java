@@ -33,7 +33,7 @@ public class PatientController {
     }
 
     @GetMapping("/user/index")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "10") int size,
@@ -51,13 +51,14 @@ public class PatientController {
     }
 
     @GetMapping("/user/patients")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         return ResponseEntity.ok(repository.findAll());
     }
 
     // localhost://8081/index?id=33
     @GetMapping("/admin/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String deleteById(
         @RequestParam(name = "id") long id,
         @RequestParam(name = "page", defaultValue = "0") int page,
@@ -73,20 +74,20 @@ public class PatientController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String homePage() {
         return "redirect:/user/index";
     }
 
     @GetMapping("/admin/formPatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String formPatient(Model model) {
         model.addAttribute("patient", new Patient());
         return "/form_patient/formPatient";
     }
 
     @PostMapping("/admin/addPatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String addPatient(@Valid Patient patient, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -99,7 +100,7 @@ public class PatientController {
     }
 
     @GetMapping("/admin/editPatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String editPatient(Model model, @RequestParam(name = "id") Long id) {
 
        Optional<Patient> patientById = repository.findById(id);
@@ -121,7 +122,7 @@ public class PatientController {
     }
 
     @PostMapping("/admin/savePatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Patient> savePatient(@Valid Patient patient, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -133,7 +134,7 @@ public class PatientController {
     }
 
     @GetMapping("/user/patient-list")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<List<Patient>> allPatients() {
         return ResponseEntity.ok(repository.findAll());
     }

@@ -53,6 +53,24 @@ public class JDBC_UserManager {
         );
     }
 
+    @GetMapping("/jdbc-user-authorities")
+    public void createUserWithAuthorities() {
+        String userE = "userE";
+        String userF = "userF";
+        String adminC = "adminC";
+        jdbcUserDetailsManager.createUser(
+                User.withUsername(userE).password(passwordEncoder.encode("12345")).authorities("USER").build()
+
+        );
+        jdbcUserDetailsManager.createUser(
+                User.withUsername(userF).password(passwordEncoder.encode("12345")).authorities("USER").build()
+
+        );
+        jdbcUserDetailsManager.createUser(
+                User.withUsername(adminC).password(passwordEncoder.encode("12345")).authorities("USER", "ADMIN").build()
+        );
+    }
+
     @GetMapping("/add-role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> addRole(@RequestParam(name = "newRole", defaultValue = "ROLE_USER") String newRole, @RequestParam(name="username") String username) {
